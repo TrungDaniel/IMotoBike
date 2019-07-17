@@ -1,5 +1,6 @@
 package com.example.imotobike;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.core.view.GravityCompat;
@@ -7,6 +8,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import android.view.MenuItem;
 
+import com.example.imotobike.Util.Appconfig;
 import com.example.imotobike.model.Login;
 import com.google.android.material.navigation.NavigationView;
 
@@ -17,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,7 +43,10 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void setData() {
-        Login login = getIntent().getStrira("user");
+        String ten = Appconfig.getPhoneNumber(HomeActivity.this);
+        Toast.makeText(this, ""+ten, Toast.LENGTH_SHORT).show();
+
+
     }
 
     private void init() {
@@ -84,13 +90,15 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_phu_tung) {
-
-        } else if (id == R.id.nav_phu_tung) {
-
-        } else if (id == R.id.nav_dang_xuat) {
-
-        }
+       switch (id){
+           case R.id.nav_phu_tung:
+           case R.id.nav_dang_xuat:{
+               Appconfig.logout(this);
+               Intent intent = new Intent(HomeActivity.this,SplashActivity.class);
+               startActivity(intent);
+               finish();
+           }
+       }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

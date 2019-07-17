@@ -3,6 +3,7 @@ package com.example.imotobike;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.imotobike.IMotoAPI.API;
+import com.example.imotobike.Util.Appconfig;
 import com.example.imotobike.model.Login;
 import com.google.gson.Gson;
 
@@ -51,17 +53,17 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         try {
-                            String strJson =response.body().string();
+                            String strJson = response.body().string();
                             Gson gson = new Gson();
                             Login login = gson.fromJson(strJson, Login.class);
                             String phone = login.getLoginResult().getPhone().toString();
-                           if (soDienThoai.equals(phone)){
+                            if (soDienThoai.equals(phone)) {
                                 Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                                intent.putExtra("user",login);
+                                String ten = login.getLoginResult().getCustomerName().toString();
+                                Appconfig.setPhoneNumber(ten,MainActivity.this);
                                 startActivity(intent);
                                 finish();
-                            }
-                            else {
+                            } else {
                                 Toast.makeText(MainActivity.this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
                             }
                         } catch (IOException e) {
