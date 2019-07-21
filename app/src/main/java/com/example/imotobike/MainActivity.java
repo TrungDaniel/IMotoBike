@@ -56,11 +56,19 @@ public class MainActivity extends AppCompatActivity {
                             String strJson = response.body().string();
                             Gson gson = new Gson();
                             Login login = gson.fromJson(strJson, Login.class);
-                            String phone = login.getLoginResult().getPhone().toString();
-                            if (soDienThoai.equals(phone)) {
+
+                            // ------ lấy dữ liệu người dùng xuống
+                            String ten_user = login.getLoginResult().getCustomerName();
+                            String phone_user = login.getLoginResult().getPhone().toString();
+                            String bienso_user = login.getLoginResult().getListBike().toString();
+                            //------
+                            // kiểm tra số điện thoại có đúng không
+                            if (soDienThoai.equals(phone_user)) {
+                                // đưa dữu liệu người dùng vào lưu trữ
+                                Appconfig.setTenUser(ten_user, MainActivity.this);
+                                Appconfig.setPhoneNumber(phone_user, MainActivity.this);
+                                Appconfig.setBiensoUser(bienso_user, MainActivity.this);
                                 Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                                String ten = login.getLoginResult().getCustomerName().toString();
-                                Appconfig.setPhoneNumber(ten,MainActivity.this);
                                 startActivity(intent);
                                 finish();
                             } else {
@@ -74,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(MainActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Vui lòng kiểm tra lại kết nối mạng", Toast.LENGTH_SHORT).show();
 
                     }
                 });

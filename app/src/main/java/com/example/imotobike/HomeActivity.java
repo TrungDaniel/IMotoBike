@@ -9,21 +9,32 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.example.imotobike.Util.Appconfig;
-import com.example.imotobike.model.Login;
+import com.example.imotobike.adapter.HomePagerAdapter;
+import com.example.imotobike.fragment.TatCaFragment;
+import com.example.imotobike.fragment.ThuongXuyenFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.Menu;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    TextView tvTen, tvSdt, tvBienSo;
+    TabLayout tlHome;
+    ViewPager vpHome;
+    ArrayList<Fragment> data = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,21 +49,50 @@ public class HomeActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        //--------
         init();
-        setData();
+        setDataNavigation();
+        configVP();
     }
 
-    private void setData() {
-        String ten = Appconfig.getPhoneNumber(HomeActivity.this);
-        Toast.makeText(this, ""+ten, Toast.LENGTH_SHORT).show();
+
+    private void configVP() {
+        TatCaFragment tatCaFragment = new TatCaFragment();
+        ThuongXuyenFragment thuongXuyenFragment = new ThuongXuyenFragment();
+        data.add(tatCaFragment);
+        data.add(thuongXuyenFragment);
+        HomePagerAdapter adapter = new HomePagerAdapter(getSupportFragmentManager(), this, data);
+        vpHome.setAdapter(adapter);
+        tlHome.setupWithViewPager(vpHome);
+
+
+    }
+
+    private void setDataNavigation() {
+        // lấy id của view trong navigation
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView tenUser = (TextView) headerView.findViewById(R.id.tv_ten);
+        TextView phoneUser = (TextView) headerView.findViewById(R.id.tv_so_dien_thoai);
+        TextView biensoUser = (TextView) headerView.findViewById(R.id.tv_bien_so);
+        //---
+        String strPhoneUser = Appconfig.getPhoneNumber(HomeActivity.this);
+        String strTenUser = Appconfig.getTenUser(HomeActivity.this);
+        String strBiensoUser = Appconfig.getBiensoUser(HomeActivity.this);
+        tenUser.setText(strTenUser);
+        phoneUser.setText(strPhoneUser);
+        biensoUser.setText(strBiensoUser);
+        //------
+        Toast.makeText(this, "Xin chào " + strTenUser, Toast.LENGTH_SHORT).show();
 
 
     }
 
     private void init() {
-        tvTen = findViewById(R.id.tv_ten);
-        tvBienSo = findViewById(R.id.tv_bien_so);
-        tvSdt = findViewById(R.id.tv_so_dien_thoai);
+        tlHome = findViewById(R.id.tb_home);
+        vpHome = findViewById(R.id.vp_home);
+
+
     }
 
     @Override
@@ -67,7 +107,6 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
@@ -75,12 +114,9 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -90,15 +126,18 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-       switch (id){
-           case R.id.nav_phu_tung:
-           case R.id.nav_dang_xuat:{
-               Appconfig.logout(this);
-               Intent intent = new Intent(HomeActivity.this,SplashActivity.class);
-               startActivity(intent);
-               finish();
-           }
-       }
+        switch (id) {
+            case R.id.nav_phu_tung: {
+                break;
+            }
+            case R.id.nav_dang_xuat: {
+                Appconfig.logout(this);
+                Intent intent = new Intent(HomeActivity.this, SplashActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            }
+        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
