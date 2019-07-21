@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TatCa {
+public class Thuongxuyen {
 
     @SerializedName("status")
     @Expose
@@ -15,7 +15,7 @@ public class TatCa {
     public Integer code;
     @SerializedName("result")
     @Expose
-    public List<TatCaResult> tatCaResults = null;
+    public List<ThuongXuyenResult> thuongXuyenResults = null;
     @SerializedName("message")
     @Expose
     public String message;
@@ -36,12 +36,12 @@ public class TatCa {
         this.code = code;
     }
 
-    public List<TatCaResult> getTatCaResults() {
-        return tatCaResults;
+    public List<ThuongXuyenResult> getThuongXuyenResults() {
+        return thuongXuyenResults;
     }
 
-    public void setTatCaResults(List<TatCaResult> tatCaResults) {
-        this.tatCaResults = tatCaResults;
+    public void setThuongXuyenResults(List<ThuongXuyenResult> thuongXuyenResults) {
+        this.thuongXuyenResults = thuongXuyenResults;
     }
 
     public String getMessage() {

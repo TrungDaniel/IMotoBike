@@ -3,19 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single" android:enabled="true">
+    <group
+        android:checkableBehavior="single"
+        android:enabled="true">
         <item
-            android:checked="true"
             android:id="@+id/nav_phu_tung"
+            android:checked="true"
             android:icon="@mipmap/ic_menu_phu_tung"
             android:title="Phụ tùng" />
+
+
+    </group>
+    <group>
         <item
+
             android:id="@+id/nav_dang_xuat"
             android:icon="@mipmap/ic_menu_dang_xuat"
             android:title="Đăng Xuất" />
 
     </group>
-
 
 
 </menu>

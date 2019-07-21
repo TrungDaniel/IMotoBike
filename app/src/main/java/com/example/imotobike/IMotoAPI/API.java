@@ -11,4 +11,8 @@ public interface API {
 
     @POST("Service/GetPriceListMaterial")
     Call<ResponseBody> getAll(@Body Object object);
+
+    @POST("Service/GetPriceListMaterialFollow")
+    Call<ResponseBody> getThuongXuyen(@Body Object object);
+
 }

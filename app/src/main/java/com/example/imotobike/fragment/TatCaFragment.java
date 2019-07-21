@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,7 +18,13 @@ import android.widget.Toast;
 
 import com.example.imotobike.IMotoAPI.API;
 import com.example.imotobike.R;
+import com.example.imotobike.adapter.TatCaAdapter;
+import com.example.imotobike.model.TatCa;
+import com.example.imotobike.model.TatCaResult;
 import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -29,6 +36,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class TatCaFragment extends Fragment {
     View view;
     RecyclerView rvTatCa;
+
 
     public TatCaFragment() {
     }
@@ -55,7 +63,21 @@ public class TatCaFragment extends Fragment {
         retrofit.create(API.class).getAll(getTatCa).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Toast.makeText(getContext(), "ok", Toast.LENGTH_SHORT).show();
+                try {
+                    String strJson = response.body().string();
+                    Gson gson = new Gson();
+                    TatCa tatCa = gson.fromJson(strJson, TatCa.class);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+                    rvTatCa.setLayoutManager(linearLayoutManager);
+                    TatCaAdapter adapter = new TatCaAdapter();
+                    adapter.setContext(getContext());
+                    adapter.setData(tatCa.getTatCaResults());
+                    rvTatCa.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+                    rvTatCa.setAdapter(adapter);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
